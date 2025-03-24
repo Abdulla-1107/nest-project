@@ -5,9 +5,9 @@ export declare class ProductViewController {
     viewProduct(req: any, productId: string): Promise<{
         id: string;
         userId: string;
-        productId: string;
-        count: number;
         date: Date;
+        count: number;
+        productId: string;
     } | {
         message: string;
     }>;

@@ -17,7 +17,6 @@ model User {
   password  String
   role      Role     @default(USER)
   status    Status   @default(ACTIVE)
-  wasOnline DateTime @default(now())
 
   regionId String?
   region   Region? @relation(fields: [regionId], references: [id], onDelete: SetNull)

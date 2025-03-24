@@ -6,13 +6,12 @@ export declare class ProductController {
     private readonly productService;
     constructor(productService: ProductService);
     create(req: Request, data: CreateProductDto): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
-        description: string;
         id: string;
         status: string;
         name: string;
         userId: string;
         location: import("@prisma/client/runtime/library").JsonValue;
+        description: string;
         price: import("@prisma/client/runtime/library").Decimal;
         discountPercentage: number;
         discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -20,17 +19,17 @@ export declare class ProductController {
         count: number;
         condition: string;
         bargain: boolean;
-        categoryId: string;
+        type: import(".prisma/client").$Enums.ProductType;
         createdAt: Date;
+        categoryId: string;
     }>;
     findAll(page: string, limit: string, search: string, categoryId: string): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
-        description: string;
         id: string;
         status: string;
         name: string;
         userId: string;
         location: import("@prisma/client/runtime/library").JsonValue;
+        description: string;
         price: import("@prisma/client/runtime/library").Decimal;
         discountPercentage: number;
         discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -38,17 +37,17 @@ export declare class ProductController {
         count: number;
         condition: string;
         bargain: boolean;
-        categoryId: string;
+        type: import(".prisma/client").$Enums.ProductType;
         createdAt: Date;
+        categoryId: string;
     }[]>;
     findOne(id: string): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
-        description: string;
         id: string;
         status: string;
         name: string;
         userId: string;
         location: import("@prisma/client/runtime/library").JsonValue;
+        description: string;
         price: import("@prisma/client/runtime/library").Decimal;
         discountPercentage: number;
         discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -56,17 +55,17 @@ export declare class ProductController {
         count: number;
         condition: string;
         bargain: boolean;
-        categoryId: string;
+        type: import(".prisma/client").$Enums.ProductType;
         createdAt: Date;
+        categoryId: string;
     }>;
     update(req: Request, id: string, data: UpdateProductDto): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
-        description: string;
         id: string;
         status: string;
         name: string;
         userId: string;
         location: import("@prisma/client/runtime/library").JsonValue;
+        description: string;
         price: import("@prisma/client/runtime/library").Decimal;
         discountPercentage: number;
         discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -74,17 +73,17 @@ export declare class ProductController {
         count: number;
         condition: string;
         bargain: boolean;
-        categoryId: string;
+        type: import(".prisma/client").$Enums.ProductType;
         createdAt: Date;
+        categoryId: string;
     }>;
     remove(req: Request, id: string): Promise<{
-        type: import(".prisma/client").$Enums.ProductType;
-        description: string;
         id: string;
         status: string;
         name: string;
         userId: string;
         location: import("@prisma/client/runtime/library").JsonValue;
+        description: string;
         price: import("@prisma/client/runtime/library").Decimal;
         discountPercentage: number;
         discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -92,7 +91,8 @@ export declare class ProductController {
         count: number;
         condition: string;
         bargain: boolean;
-        categoryId: string;
+        type: import(".prisma/client").$Enums.ProductType;
         createdAt: Date;
+        categoryId: string;
     }>;
 }

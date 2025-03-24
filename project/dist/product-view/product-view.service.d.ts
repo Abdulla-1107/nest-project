@@ -7,11 +7,11 @@ export declare class ProductViewService {
         viewCount: number;
     }>;
     addView(userId: string, productId: string): Promise<{
-        count: number;
-        productId: string;
         id: string;
         userId: string;
         date: Date;
+        count: number;
+        productId: string;
     } | {
         message: string;
     }>;
