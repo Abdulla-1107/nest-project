@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Post, Body } from "@nestjs/common";
+import { UserService } from "./user.service";
+import { EmailUserDto, VerifyOtpDto } from "./dto/email-user.dto";
+import { RegisterUserDto } from "./dto/register-user.dto";
+import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { LoginUserDto } from "./dto/login-user.dto";
 
-@Controller('user')
+@ApiTags("User")
+@Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @ApiOperation({ summary: "Emailga OTP yuborish" })
+  @ApiResponse({ status: 201, description: "OTP yuborildi" })
+  @ApiResponse({ status: 400, description: "Email noto‘g‘ri" })
+  @Post("send-otp")
+  sendEmailOtp(@Body() emailDto: EmailUserDto) {
+    return this.userService.sendEmailOtp(emailDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @ApiOperation({ summary: "OTP ni tekshirish" })
+  @ApiResponse({ status: 200, description: "OTP to‘g‘ri" })
+  @ApiResponse({ status: 400, description: "OTP noto‘g‘ri" })
+  @Post("verify-otp")
+  verifyEmailOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+    return this.userService.verifyEmailOtp(verifyOtpDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @ApiOperation({ summary: "Foydalanuvchini ro'yxatdan o'tkazish" })
+  @ApiResponse({ status: 201, description: "Foydalanuvchi ro'yxatdan o'tdi" })
+  @ApiResponse({
+    status: 400,
+    description: "Email aktiv emas yoki noto'g'ri ma'lumot",
+  })
+  @Post("register")
+  register(@Body() registerDto: RegisterUserDto) {
+    return this.userService.register(registerDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @ApiOperation({ summary: "Foydalanuvchi tizimga kirishi" })
+  @ApiResponse({ status: 200, description: "Muvaffaqiyatli login" })
+  @ApiResponse({ status: 400, description: "Email yoki parol noto‘g‘ri" })
+  @Post("login")
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto);
   }
 }

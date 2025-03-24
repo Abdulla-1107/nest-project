@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  image     String
+  phone     String   @unique
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  status    Status   @default(ACTIVE)
+  wasOnline DateTime @default(now())
+
+  regionId String?
+  region   Region? @relation(fields: [regionId], references: [id], onDelete: SetNull)
+
+  sessions      Session[]
+  Product       Product[]
+  Like          Like[]
+  Comment       Comment[]
+  Order         Order[]
+  ProductView   ProductView[]
+  sentChats     Chat[]        @relation("SentChats")
+  receivedChats Chat[]        @relation("ReceivedChats")
+}
+
+enum Role {
+  ADMIN
+  USER
+  SUPERADMIN
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+model Region {
+  id    String @id @default(uuid())
+  name  String
+  users User[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  location  String?
+  info      String?
+  date      DateTime @default(now())
+}
+
+model Product {
+  id                 String      @id @default(uuid())
+  name               String
+  price              Decimal     @db.Decimal
+  discountPercentage Int         @default(0) // Skidka foizda (0-100%)
+  discountAmount     Decimal?    @db.Decimal // Skidka summada (optional)
+  finalPrice         Decimal?    @db.Decimal // Skidkadan keyingi yakuniy narx
+  count              Int
+  description        String
+  condition          String
+  bargain            Boolean     @default(false)
+  status             String
+  type               ProductType
+  location           Json
+  createdAt          DateTime    @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  Like        Like[]
+  Comment     Comment[]
+  Order       Order[]
+  ProductView ProductView[]
+  Chat        Chat[]
+  ColorItem   ColorItem[]
+}
+
+enum ProductType {
+  PHONE
+  LAPTOP
+  ACCESSORY
+  ELECTRONICS
+}
+
+model Category {
+  id      String    @id @default(uuid())
+  name    String
+  type    String
+  Product Product[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId]) // Har bir user mahsulotni faqat bir marta layklashi mumkin
+  @@index([userId])
+  @@index([productId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  star      Int      @default(5)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  count     Int
+  summa     Decimal  @default(0.0) @db.Decimal
+  createdAt DateTime @default(now())
+}
+
+model ProductView {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  count     Int      @default(1)  
+  date      DateTime @default(now())
+
+  @@unique([userId, productId]) 
+}
+
+
+model Chat {
+  id        String   @id @default(uuid())
+  text      String
+  fromId    String
+  from      User     @relation(name: "SentChats", fields: [fromId], references: [id], onDelete: Cascade)
+  toId      String
+  to        User     @relation(name: "ReceivedChats", fields: [toId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  date      DateTime @default(now())
+}
+
+model Color {
+  id         String      @id @default(uuid())
+  name       String
+  colorItems ColorItem[]
+}
+
+model ColorItem {
+  id        String  @id @default(uuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  colorId   String
+  color     Color   @relation(fields: [colorId], references: [id], onDelete: Cascade)
+}
+
+model Information {
+  id            String  @id @default(uuid())
+  about         String
+  privacyPolicy String
+  email         String  @unique
+  phone         String  @unique
+  telegram      String?
+  instagram     String?
+  facebook      String?
+}
