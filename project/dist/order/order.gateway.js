@@ -8,17 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 let OrderGateway = class OrderGateway {
     server;
-    sendOrderNotification(ownerId, order) {
-        this.server.to(ownerId).emit("newOrder", {
-            message: "Sizning mahsulotingizga buyurtma berildi!",
-            order,
-        });
+    handleConnection(client) {
+        console.log(`Client connected: ${client.id}`);
+    }
+    handleDisconnect(client) {
+        console.log(`Client disconnected: ${client.id}`);
+    }
+    sendOrderNotification(data) {
+        this.server.emit('receiveOrderNotification', data);
     }
 };
 exports.OrderGateway = OrderGateway;
@@ -26,6 +32,13 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], OrderGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('sendOrderNotification'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrderGateway.prototype, "sendOrderNotification", null);
 exports.OrderGateway = OrderGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: true })
 ], OrderGateway);

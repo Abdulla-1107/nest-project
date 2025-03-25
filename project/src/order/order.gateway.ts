@@ -1,15 +1,28 @@
-import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Server } from "socket.io";
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
+import { Server } from 'socket.io';
 
-@WebSocketGateway({ cors: true })
-export class OrderGateway {
+@WebSocketGateway({ cors: true }) // CORS qo'shish
+export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  sendOrderNotification(ownerId: string, order: any) {
-    this.server.to(ownerId).emit("newOrder", {
-      message: "Sizning mahsulotingizga buyurtma berildi!",
-      order,
-    });
+  handleConnection(client: any) {
+    console.log(`Client connected: ${client.id}`);
+  }
+
+  handleDisconnect(client: any) {
+    console.log(`Client disconnected: ${client.id}`);
+  }
+
+  @SubscribeMessage('sendOrderNotification')
+  sendOrderNotification(@MessageBody() data: any) {
+    this.server.emit('receiveOrderNotification', data);
   }
 }

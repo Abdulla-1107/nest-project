@@ -12,10 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const order_gateway_1 = require("./order.gateway");
 let OrderService = class OrderService {
     prisma;
-    constructor(prisma) {
+    orderGateway;
+    constructor(prisma, orderGateway) {
         this.prisma = prisma;
+        this.orderGateway = orderGateway;
     }
     async create(userId, data) {
         try {
@@ -27,13 +30,18 @@ let OrderService = class OrderService {
             if (product.finalPrice == null)
                 throw new common_1.InternalServerErrorException("Mahsulot narxi mavjud emas.");
             const summa = Number(product.finalPrice) * data.count;
-            return await this.prisma.order.create({
+            const order = await this.prisma.order.create({
                 data: {
                     ...data,
                     userId,
                     summa,
                 },
             });
+            this.orderGateway.sendOrderNotification({
+                message: `Yangi buyurtma yaratildi! ID: ${order.id}`,
+                order,
+            });
+            return order;
         }
         catch (error) {
             throw new common_1.InternalServerErrorException("Buyurtma yaratishda xatolik yuz berdi.");
@@ -100,6 +108,7 @@ let OrderService = class OrderService {
 exports.OrderService = OrderService;
 exports.OrderService = OrderService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        order_gateway_1.OrderGateway])
 ], OrderService);
 //# sourceMappingURL=order.service.js.map

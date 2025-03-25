@@ -6,10 +6,14 @@ import {
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
+import { OrderGateway } from "./order.gateway";
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private orderGateway: OrderGateway
+  ) {}
 
   async create(userId: string, data: CreateOrderDto) {
     try {
@@ -18,19 +22,25 @@ export class OrderService {
       });
 
       if (!product) throw new NotFoundException("Mahsulot topilmadi");
-
       if (product.finalPrice == null)
         throw new InternalServerErrorException("Mahsulot narxi mavjud emas.");
 
-      const summa = Number(product.finalPrice) * data.count; 
+      const summa = Number(product.finalPrice) * data.count;
 
-      return await this.prisma.order.create({
+      const order = await this.prisma.order.create({
         data: {
           ...data,
           userId,
           summa,
         },
       });
+
+      this.orderGateway.sendOrderNotification({
+        message: `Yangi buyurtma yaratildi! ID: ${order.id}`,
+        order,
+      });
+
+      return order;
     } catch (error) {
       throw new InternalServerErrorException(
         "Buyurtma yaratishda xatolik yuz berdi."
@@ -80,7 +90,7 @@ export class OrderService {
 
         return await this.prisma.order.update({
           where: { id },
-          data: { ...data, summa } as any, 
+          data: { ...data, summa } as any,
         });
       }
 
