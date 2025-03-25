@@ -13,10 +13,16 @@ import { LikeModule } from './like/like.module';
 import { CommentModule } from './comment/comment.module';
 import { OrderModule } from './order/order.module';
 import { ProductViewModule } from './product-view/product-view.module';
+import { ChatGateway } from './chat/chat.gateway';
+import { ChatService } from './chat/chat.service';
+import { ChatModule } from './chat/chat.module';
+import { ColorItemModule } from './color-item/color-item.module';
+import { ColorModule } from './color/color.module';
+import { InformationModule } from './information/information.module';
 
 @Module({
-  imports: [UserModule, ConfigModule.forRoot(), RegionModule, SessionModule, PrismaModule, ProductModule, CategoryModule, LikeModule, CommentModule, OrderModule, ProductViewModule],
+  imports: [UserModule, ConfigModule.forRoot(), RegionModule, SessionModule, PrismaModule, ProductModule, CategoryModule, LikeModule, CommentModule, OrderModule, ProductViewModule, ChatModule, ColorItemModule, ColorModule, InformationModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, ChatGateway, ChatService],
 })
 export class AppModule {}

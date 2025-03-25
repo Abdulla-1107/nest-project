@@ -21,6 +21,7 @@ const swagger_1 = require("@nestjs/swagger");
 const role_decorators_1 = require("../decorators/role.decorators");
 const role_enum_1 = require("../enums/role.enum");
 const auth_guard_1 = require("../guards/auth.guard");
+const role_guard_1 = require("../guards/role.guard");
 let CategoryController = class CategoryController {
     categoryService;
     constructor(categoryService) {
@@ -45,6 +46,7 @@ let CategoryController = class CategoryController {
 exports.CategoryController = CategoryController;
 __decorate([
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: "Yangi kategoriya qo‘shish" }),
@@ -75,6 +77,7 @@ __decorate([
 ], CategoryController.prototype, "findOne", null);
 __decorate([
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Patch)(":id"),
     (0, swagger_1.ApiOperation)({ summary: "Kategoriyani yangilash" }),
@@ -92,6 +95,7 @@ __decorate([
 ], CategoryController.prototype, "update", null);
 __decorate([
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Delete)(":id"),
     (0, swagger_1.ApiOperation)({ summary: "Kategoriyani o‘chirish" }),

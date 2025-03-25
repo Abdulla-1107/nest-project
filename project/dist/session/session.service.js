@@ -27,9 +27,13 @@ let SessionService = class SessionService {
         });
     }
     async remove(id) {
-        return await this.prisma.session.delete({
+        let session = await this.prisma.session.delete({
             where: { id },
         });
+        if (!session) {
+            throw new common_1.NotFoundException("Session topilmadi");
+        }
+        return { data: session };
     }
 };
 exports.SessionService = SessionService;

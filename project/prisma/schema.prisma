@@ -13,7 +13,7 @@ model User {
   lastName  String
   image     String
   phone     String   @unique
-  email     String   @unique
+  email     String  
   password  String
   role      Role     @default(USER)
   status    Status   @default(ACTIVE)
@@ -34,7 +34,6 @@ model User {
 enum Role {
   ADMIN
   USER
-  SUPERADMIN
 }
 
 enum Status {

@@ -28,10 +28,10 @@ export class UserService {
   async sendEmailOtp(emailDto: EmailUserDto) {
     const { email } = emailDto;
 
-    const existingUser = await this.prisma.user.findFirst({ where: { email } });
-    if (existingUser) {
-      throw new ConflictException("Bu email allaqachon ro‘yxatdan o‘tgan");
-    }
+    // const existingUser = await this.prisma.user.findFirst({ where: { email } });
+    // if (existingUser) {
+    //   throw new ConflictException("Bu email allaqachon ro‘yxatdan o‘tgan");
+    // }
 
     const otp = authenticator.generate("secret");
 
@@ -75,8 +75,15 @@ export class UserService {
   }
 
   async register(registerDto: RegisterUserDto) {
-    const { email, password, regionId, ...userData } = registerDto;
+    const { email, password, regionId, phone, ...userData } = registerDto;
 
+    let checkPhone = await this.prisma.user.findUnique({ where: { phone } });
+
+    if (checkPhone) {
+      throw new ConflictException(
+        "Telefon raqam allaqachon ro'yxatdan o'tilgan"
+      );
+    }
     const storedData = this.otpStore.get(email);
     if (!storedData || !storedData.verified) {
       throw new BadRequestException(
@@ -102,6 +109,7 @@ export class UserService {
     const userDataToSave: any = {
       ...userData,
       email,
+      phone,
       password: hashedPassword,
     };
 
@@ -117,7 +125,7 @@ export class UserService {
   async login(loginDto: LoginUserDto) {
     const { email, password, ip } = loginDto;
 
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findFirst({ where: { email } });
 
     if (!user) {
       throw new UnauthorizedException("Email yoki parol noto‘g‘ri.");
@@ -141,5 +149,9 @@ export class UserService {
     const token = this.jwtService.sign(payload);
 
     return { token };
+  }
+
+  async findAll() {
+    return { data: await this.prisma.user.findMany() };
   }
 }

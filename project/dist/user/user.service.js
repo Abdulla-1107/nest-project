@@ -30,10 +30,6 @@ let UserService = class UserService {
     }
     async sendEmailOtp(emailDto) {
         const { email } = emailDto;
-        const existingUser = await this.prisma.user.findFirst({ where: { email } });
-        if (existingUser) {
-            throw new common_1.ConflictException("Bu email allaqachon ro‘yxatdan o‘tgan");
-        }
         const otp = otplib_1.authenticator.generate("secret");
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -65,7 +61,11 @@ let UserService = class UserService {
         return { message: "OTP to‘g‘ri. Email tasdiqlandi." };
     }
     async register(registerDto) {
-        const { email, password, regionId, ...userData } = registerDto;
+        const { email, password, regionId, phone, ...userData } = registerDto;
+        let checkPhone = await this.prisma.user.findUnique({ where: { phone } });
+        if (checkPhone) {
+            throw new common_1.ConflictException("Telefon raqam allaqachon ro'yxatdan o'tilgan");
+        }
         const storedData = this.otpStore.get(email);
         if (!storedData || !storedData.verified) {
             throw new common_1.BadRequestException("Email tasdiqlanmagan. Avval OTP tasdiqlang.");
@@ -85,6 +85,7 @@ let UserService = class UserService {
         const userDataToSave = {
             ...userData,
             email,
+            phone,
             password: hashedPassword,
         };
         if (regionId) {
@@ -95,7 +96,7 @@ let UserService = class UserService {
     }
     async login(loginDto) {
         const { email, password, ip } = loginDto;
-        const user = await this.prisma.user.findUnique({ where: { email } });
+        const user = await this.prisma.user.findFirst({ where: { email } });
         if (!user) {
             throw new common_1.UnauthorizedException("Email yoki parol noto‘g‘ri.");
         }
@@ -114,6 +115,9 @@ let UserService = class UserService {
         const payload = { id: user.id, email: user.email, role: user.role };
         const token = this.jwtService.sign(payload);
         return { token };
+    }
+    async findAll() {
+        return { data: await this.prisma.user.findMany() };
     }
 };
 exports.UserService = UserService;

@@ -19,6 +19,10 @@ const email_user_dto_1 = require("./dto/email-user.dto");
 const register_user_dto_1 = require("./dto/register-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const login_user_dto_1 = require("./dto/login-user.dto");
+const auth_guard_1 = require("../guards/auth.guard");
+const role_guard_1 = require("../guards/role.guard");
+const role_decorators_1 = require("../decorators/role.decorators");
+const role_enum_1 = require("../enums/role.enum");
 let UserController = class UserController {
     userService;
     constructor(userService) {
@@ -35,6 +39,9 @@ let UserController = class UserController {
     }
     login(loginUserDto) {
         return this.userService.login(loginUserDto);
+    }
+    findAll() {
+        return this.userService.findAll();
     }
 };
 exports.UserController = UserController;
@@ -81,6 +88,15 @@ __decorate([
     __metadata("design:paramtypes", [login_user_dto_1.LoginUserDto]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "login", null);
+__decorate([
+    (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "findAll", null);
 exports.UserController = UserController = __decorate([
     (0, swagger_1.ApiTags)("User"),
     (0, common_1.Controller)("user"),

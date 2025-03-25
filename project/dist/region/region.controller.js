@@ -21,6 +21,7 @@ const update_region_dto_1 = require("./dto/update-region.dto");
 const role_enum_1 = require("../enums/role.enum");
 const role_decorators_1 = require("../decorators/role.decorators");
 const auth_guard_1 = require("../guards/auth.guard");
+const role_guard_1 = require("../guards/role.guard");
 let RegionController = class RegionController {
     regionService;
     constructor(regionService) {
@@ -48,6 +49,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 201, description: "Region muvaffaqiyatli yaratildi" }),
     (0, swagger_1.ApiResponse)({ status: 400, description: "Noto'g'ri ma'lumot" }),
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -78,6 +80,8 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: "Region muvaffaqiyatli yangilandi" }),
     (0, swagger_1.ApiResponse)({ status: 404, description: "Region topilmadi" }),
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
@@ -90,6 +94,8 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: "Region muvaffaqiyatli o‘chirildi" }),
     (0, swagger_1.ApiResponse)({ status: 404, description: "Region topilmadi" }),
     (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),

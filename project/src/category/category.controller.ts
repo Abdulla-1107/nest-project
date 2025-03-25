@@ -11,10 +11,17 @@ import {
 import { CategoryService } from "./category.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBody,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
 import { Role } from "src/decorators/role.decorators";
 import { Roles } from "src/enums/role.enum";
 import { AuthGuard } from "src/guards/auth.guard";
+import { RoleGuard } from "src/guards/role.guard";
 
 @ApiTags("Categories")
 @ApiBearerAuth()
@@ -23,6 +30,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Role(Roles.ADMIN)
+  @UseGuards(RoleGuard)
   @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: "Yangi kategoriya qo‘shish" })
@@ -48,6 +56,7 @@ export class CategoryController {
   }
 
   @Role(Roles.ADMIN)
+  @UseGuards(RoleGuard)
   @UseGuards(AuthGuard)
   @Patch(":id")
   @ApiOperation({ summary: "Kategoriyani yangilash" })
@@ -62,6 +71,7 @@ export class CategoryController {
   }
 
   @Role(Roles.ADMIN)
+  @UseGuards(RoleGuard)
   @UseGuards(AuthGuard)
   @Delete(":id")
   @ApiOperation({ summary: "Kategoriyani o‘chirish" })

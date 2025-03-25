@@ -13,8 +13,13 @@ import { SessionService } from "./session.service";
 import { CreateSessionDto } from "./dto/create-session.dto";
 import { UpdateSessionDto } from "./dto/update-session.dto";
 import { AuthGuard } from "src/guards/auth.guard";
+import { Role } from "src/decorators/role.decorators";
+import { Roles } from "src/enums/role.enum";
+import { RoleGuard } from "src/guards/role.guard";
 
 @ApiTags("Sessions")
+@Role(Roles.ADMIN)
+@UseGuards(RoleGuard)
 @UseGuards(AuthGuard)
 @Controller("session")
 export class SessionController {

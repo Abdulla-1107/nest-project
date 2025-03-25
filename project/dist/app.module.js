@@ -22,14 +22,20 @@ const like_module_1 = require("./like/like.module");
 const comment_module_1 = require("./comment/comment.module");
 const order_module_1 = require("./order/order.module");
 const product_view_module_1 = require("./product-view/product-view.module");
+const chat_gateway_1 = require("./chat/chat.gateway");
+const chat_service_1 = require("./chat/chat.service");
+const chat_module_1 = require("./chat/chat.module");
+const color_item_module_1 = require("./color-item/color-item.module");
+const color_module_1 = require("./color/color.module");
+const information_module_1 = require("./information/information.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, config_1.ConfigModule.forRoot(), region_module_1.RegionModule, session_module_1.SessionModule, prisma_module_1.PrismaModule, product_module_1.ProductModule, category_module_1.CategoryModule, like_module_1.LikeModule, comment_module_1.CommentModule, order_module_1.OrderModule, product_view_module_1.ProductViewModule],
+        imports: [user_module_1.UserModule, config_1.ConfigModule.forRoot(), region_module_1.RegionModule, session_module_1.SessionModule, prisma_module_1.PrismaModule, product_module_1.ProductModule, category_module_1.CategoryModule, like_module_1.LikeModule, comment_module_1.CommentModule, order_module_1.OrderModule, product_view_module_1.ProductViewModule, chat_module_1.ChatModule, color_item_module_1.ColorItemModule, color_module_1.ColorModule, information_module_1.InformationModule],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, prisma_service_1.PrismaService],
+        providers: [app_service_1.AppService, prisma_service_1.PrismaService, chat_gateway_1.ChatGateway, chat_service_1.ChatService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

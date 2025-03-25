@@ -2,20 +2,27 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ConflictException,
 } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service"; // PrismaService import qilamiz
+import { PrismaService } from "../prisma/prisma.service";
 import { CreateRegionDto } from "./dto/create-region.dto";
 import { UpdateRegionDto } from "./dto/update-region.dto";
 
 @Injectable()
 export class RegionService {
-  constructor(private prisma: PrismaService) {} 
+  constructor(private prisma: PrismaService) {}
 
   async create(createRegionDto: CreateRegionDto) {
     try {
+      const { name } = createRegionDto;
+      let checkRegion = await this.prisma.region.findFirst({ where: { name } });
+      if (checkRegion) {
+        throw new ConflictException("Bunday Region mavjud");
+      }
       return await this.prisma.region.create({ data: createRegionDto });
     } catch (error) {
-      throw new BadRequestException("Region yaratishda xatolik yuz berdi.");
+      console.log(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -51,12 +58,12 @@ export class RegionService {
       });
 
       if (!region) {
-        throw new NotFoundException(`Region ${id} topilmadi.`);
+        throw new NotFoundException(`Region topilmadi.`);
       }
 
       return region;
     } catch (error) {
-      throw new BadRequestException("Regionni olishda xatolik yuz berdi.");
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -69,9 +76,7 @@ export class RegionService {
 
       return region;
     } catch (error) {
-      throw new NotFoundException(
-        `Region ${id} yangilashda xatolik yuz berdi.`
-      );
+      throw new NotFoundException(`Region Topilmadi.`);
     }
   }
 
@@ -83,9 +88,7 @@ export class RegionService {
 
       return { message: "Region muvaffaqiyatli o'chirildi", deletedRegion };
     } catch (error) {
-      throw new NotFoundException(
-        `Region ${id} o'chirishda xatolik yuz berdi.`
-      );
+      throw new NotFoundException(`Region topilmadi`);
     }
   }
 }

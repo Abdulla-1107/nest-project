@@ -16,11 +16,13 @@ export declare class SessionService {
         date: Date;
     })[]>;
     remove(id: string): Promise<{
-        info: string | null;
-        id: string;
-        userId: string;
-        ipAddress: string | null;
-        location: string | null;
-        date: Date;
+        data: {
+            info: string | null;
+            id: string;
+            userId: string;
+            ipAddress: string | null;
+            location: string | null;
+            date: Date;
+        };
     }>;
 }

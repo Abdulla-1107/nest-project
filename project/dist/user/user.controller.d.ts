@@ -14,18 +14,32 @@ export declare class UserController {
     register(registerDto: RegisterUserDto): Promise<{
         user: {
             email: string;
-            id: string;
             firstName: string;
             lastName: string;
             image: string;
             phone: string;
             password: string;
+            regionId: string | null;
             role: import(".prisma/client").$Enums.Role;
             status: import(".prisma/client").$Enums.Status;
-            regionId: string | null;
+            id: string;
         };
     }>;
     login(loginUserDto: LoginUserDto): Promise<{
         token: string;
+    }>;
+    findAll(): Promise<{
+        data: {
+            email: string;
+            firstName: string;
+            lastName: string;
+            image: string;
+            phone: string;
+            password: string;
+            regionId: string | null;
+            role: import(".prisma/client").$Enums.Role;
+            status: import(".prisma/client").$Enums.Status;
+            id: string;
+        }[];
     }>;
 }

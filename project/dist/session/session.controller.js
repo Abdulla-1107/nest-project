@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const session_service_1 = require("./session.service");
 const auth_guard_1 = require("../guards/auth.guard");
+const role_decorators_1 = require("../decorators/role.decorators");
+const role_enum_1 = require("../enums/role.enum");
+const role_guard_1 = require("../guards/role.guard");
 let SessionController = class SessionController {
     sessionService;
     constructor(sessionService) {
@@ -53,6 +56,8 @@ __decorate([
 ], SessionController.prototype, "remove", null);
 exports.SessionController = SessionController = __decorate([
     (0, swagger_1.ApiTags)("Sessions"),
+    (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)("session"),
     __metadata("design:paramtypes", [session_service_1.SessionService])

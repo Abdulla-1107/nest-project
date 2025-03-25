@@ -53,7 +53,7 @@ export class OrderService {
   async findOne(id: string, userId: string) {
     try {
       const order = await this.prisma.order.findUnique({ where: { id } });
-      if (!order || order.userId !== userId)
+      if (!order || order.userId != userId)
         throw new NotFoundException("Buyurtma topilmadi.");
       return order;
     } catch (error) {

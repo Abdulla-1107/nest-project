@@ -19,10 +19,16 @@ let RegionService = class RegionService {
     }
     async create(createRegionDto) {
         try {
+            const { name } = createRegionDto;
+            let checkRegion = await this.prisma.region.findFirst({ where: { name } });
+            if (checkRegion) {
+                throw new common_1.ConflictException("Bunday Region mavjud");
+            }
             return await this.prisma.region.create({ data: createRegionDto });
         }
         catch (error) {
-            throw new common_1.BadRequestException("Region yaratishda xatolik yuz berdi.");
+            console.log(error.message);
+            throw new common_1.BadRequestException(error.message);
         }
     }
     async findAll() {
@@ -56,12 +62,12 @@ let RegionService = class RegionService {
                 },
             });
             if (!region) {
-                throw new common_1.NotFoundException(`Region ${id} topilmadi.`);
+                throw new common_1.NotFoundException(`Region topilmadi.`);
             }
             return region;
         }
         catch (error) {
-            throw new common_1.BadRequestException("Regionni olishda xatolik yuz berdi.");
+            throw new common_1.BadRequestException(error.message);
         }
     }
     async update(id, updateRegionDto) {
@@ -73,7 +79,7 @@ let RegionService = class RegionService {
             return region;
         }
         catch (error) {
-            throw new common_1.NotFoundException(`Region ${id} yangilashda xatolik yuz berdi.`);
+            throw new common_1.NotFoundException(`Region Topilmadi.`);
         }
     }
     async remove(id) {
@@ -84,7 +90,7 @@ let RegionService = class RegionService {
             return { message: "Region muvaffaqiyatli o'chirildi", deletedRegion };
         }
         catch (error) {
-            throw new common_1.NotFoundException(`Region ${id} o'chirishda xatolik yuz berdi.`);
+            throw new common_1.NotFoundException(`Region topilmadi`);
         }
     }
 };

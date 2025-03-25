@@ -53,7 +53,7 @@ let OrderService = class OrderService {
     async findOne(id, userId) {
         try {
             const order = await this.prisma.order.findUnique({ where: { id } });
-            if (!order || order.userId !== userId)
+            if (!order || order.userId != userId)
                 throw new common_1.NotFoundException("Buyurtma topilmadi.");
             return order;
         }

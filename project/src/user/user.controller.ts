@@ -1,9 +1,13 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Get, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { EmailUserDto, VerifyOtpDto } from "./dto/email-user.dto";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { LoginUserDto } from "./dto/login-user.dto";
+import { AuthGuard } from "src/guards/auth.guard";
+import { RoleGuard } from "src/guards/role.guard";
+import { Role } from "src/decorators/role.decorators";
+import { Roles } from "src/enums/role.enum";
 
 @ApiTags("User")
 @Controller("user")
@@ -43,5 +47,12 @@ export class UserController {
   @Post("login")
   login(@Body() loginUserDto: LoginUserDto) {
     return this.userService.login(loginUserDto);
+  }
+  @Role(Roles.ADMIN)
+  @UseGuards(RoleGuard)
+  @UseGuards(AuthGuard)
+  @Get()
+  findAll() {
+    return this.userService.findAll();
   }
 }
