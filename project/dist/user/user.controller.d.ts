@@ -13,16 +13,16 @@ export declare class UserController {
     };
     register(registerDto: RegisterUserDto): Promise<{
         user: {
-            id: string;
             email: string;
-            phone: string;
             firstName: string;
             lastName: string;
             image: string;
+            phone: string;
             password: string;
-            role: import(".prisma/client").$Enums.Role;
-            status: import(".prisma/client").$Enums.Status;
             regionId: string | null;
+            role: import(".prisma/client").$Enums.Role;
+            id: string;
+            status: import(".prisma/client").$Enums.Status;
         };
     }>;
     login(loginUserDto: LoginUserDto): Promise<{
@@ -30,16 +30,16 @@ export declare class UserController {
     }>;
     findAll(): Promise<{
         data: {
-            id: string;
             email: string;
-            phone: string;
             firstName: string;
             lastName: string;
             image: string;
+            phone: string;
             password: string;
-            role: import(".prisma/client").$Enums.Role;
-            status: import(".prisma/client").$Enums.Status;
             regionId: string | null;
+            role: import(".prisma/client").$Enums.Role;
+            id: string;
+            status: import(".prisma/client").$Enums.Status;
         }[];
     }>;
 }

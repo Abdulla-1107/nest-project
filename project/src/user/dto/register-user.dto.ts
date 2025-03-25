@@ -40,7 +40,6 @@ export class RegisterUserDto {
   @IsString()
   regionId?: string;
 
-  @ApiProperty({ example: "USER", description: "Foydalanuvchi roli (USER yoki ADMIN)", required: false })
   @IsOptional() 
   @IsEnum(Roles)
   role?: Roles; 

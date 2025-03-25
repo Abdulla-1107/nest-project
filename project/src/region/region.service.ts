@@ -26,9 +26,17 @@ export class RegionService {
     }
   }
 
-  async findAll() {
+  async findAllFiltered(name?: string) {
     try {
       return await this.prisma.region.findMany({
+        where: name
+          ? {
+              name: {
+                contains: name, // `contains` qisman mos keladiganlarni ham topadi
+                mode: "insensitive", // Katta-kichik harflarga e'tibor bermaydi
+              },
+            }
+          : {}, // Agar name kelmasa, barcha regionlarni qaytaradi
         include: {
           users: {
             select: {

@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiQuery,
 } from "@nestjs/swagger";
 import { RegionService } from "./region.service";
 import { CreateRegionDto } from "./dto/create-region.dto";
@@ -39,14 +41,18 @@ export class RegionController {
     return this.regionService.create(createRegionDto);
   }
 
-  @ApiOperation({ summary: "Barcha regionlarni olish" })
+  @ApiOperation({
+    summary: "Barcha regionlarni olish (name bo‘yicha filtrlash mumkin)",
+  })
   @ApiResponse({ status: 200, description: "Regionlar ro'yxati" })
-  @Role(Roles.USER)
-  @UseGuards(RoleGuard)
-  @UseGuards(AuthGuard)
+  @ApiQuery({
+    name: "name",
+    required: false,
+    description: "Region nomi bo‘yicha qidirish",
+  })
   @Get()
-  findAll() {
-    return this.regionService.findAll();
+  findAll(@Query("name") name?: string) {
+    return this.regionService.findAllFiltered(name);
   }
 
   @ApiOperation({ summary: "Bitta regionni olish" })

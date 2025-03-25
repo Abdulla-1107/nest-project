@@ -18,10 +18,6 @@ const category_service_1 = require("./category.service");
 const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
 const swagger_1 = require("@nestjs/swagger");
-const role_decorators_1 = require("../decorators/role.decorators");
-const role_enum_1 = require("../enums/role.enum");
-const auth_guard_1 = require("../guards/auth.guard");
-const role_guard_1 = require("../guards/role.guard");
 let CategoryController = class CategoryController {
     categoryService;
     constructor(categoryService) {
@@ -45,9 +41,6 @@ let CategoryController = class CategoryController {
 };
 exports.CategoryController = CategoryController;
 __decorate([
-    (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
-    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: "Yangi kategoriya qo‘shish" }),
     __param(0, (0, common_1.Body)()),
@@ -76,9 +69,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "findOne", null);
 __decorate([
-    (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
-    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Patch)(":id"),
     (0, swagger_1.ApiOperation)({ summary: "Kategoriyani yangilash" }),
     (0, swagger_1.ApiParam)({
@@ -94,9 +84,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "update", null);
 __decorate([
-    (0, role_decorators_1.Role)(role_enum_1.Roles.ADMIN),
-    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Delete)(":id"),
     (0, swagger_1.ApiOperation)({ summary: "Kategoriyani o‘chirish" }),
     (0, swagger_1.ApiParam)({

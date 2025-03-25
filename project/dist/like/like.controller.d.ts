@@ -17,11 +17,12 @@ export declare class LikeController {
     }>;
     getUserLikes(req: Request): Promise<({
         product: {
-            status: string;
+            type: import(".prisma/client").$Enums.ProductType;
+            description: string;
             id: string;
+            status: string;
             name: string;
             userId: string;
-            description: string;
             price: import("@prisma/client/runtime/library").Decimal;
             discountPercentage: number;
             discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -29,9 +30,8 @@ export declare class LikeController {
             count: number;
             condition: string;
             bargain: boolean;
-            type: import(".prisma/client").$Enums.ProductType;
-            createdAt: Date;
             categoryId: string;
+            createdAt: Date;
         };
     } & {
         id: string;

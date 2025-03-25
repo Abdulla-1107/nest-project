@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ConflictException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
@@ -13,6 +14,11 @@ export class CategoryService {
 
   async create(data: CreateCategoryDto) {
     try {
+      const { name } = data;
+      let category = await this.prisma.category.findFirst({ where: { name } });
+      if (category) {
+        throw new ConflictException("Bunday category mavjud");
+      }
       return await this.prisma.category.create({ data });
     } catch (error) {
       throw new BadRequestException("Kategoriya yaratishda xatolik yuz berdi");
@@ -43,10 +49,10 @@ export class CategoryService {
 
   async update(id: string, data: UpdateCategoryDto) {
     try {
-      await this.findOne(id); 
+      await this.findOne(id);
       return await this.prisma.category.update({ where: { id }, data });
     } catch (error) {
-      throw new BadRequestException("Kategoriya yangilashda xatolik yuz berdi");
+      throw new BadRequestException("Categoriya topilmadi");
     }
   }
 
@@ -55,7 +61,7 @@ export class CategoryService {
       await this.findOne(id);
       return await this.prisma.category.delete({ where: { id } });
     } catch (error) {
-      throw new BadRequestException("Kategoriya o‘chirishda xatolik yuz berdi");
+      throw new BadRequestException("Categoriya topilmadi");
     }
   }
 }

@@ -30,8 +30,8 @@ let RegionController = class RegionController {
     create(createRegionDto) {
         return this.regionService.create(createRegionDto);
     }
-    findAll() {
-        return this.regionService.findAll();
+    findAll(name) {
+        return this.regionService.findAllFiltered(name);
     }
     findOne(id) {
         return this.regionService.findOne(id);
@@ -58,14 +58,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], RegionController.prototype, "create", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: "Barcha regionlarni olish" }),
+    (0, swagger_1.ApiOperation)({
+        summary: "Barcha regionlarni olish (name bo‘yicha filtrlash mumkin)",
+    }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Regionlar ro'yxati" }),
-    (0, role_decorators_1.Role)(role_enum_1.Roles.USER),
-    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiQuery)({
+        name: "name",
+        required: false,
+        description: "Region nomi bo‘yicha qidirish",
+    }),
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)("name")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], RegionController.prototype, "findAll", null);
 __decorate([

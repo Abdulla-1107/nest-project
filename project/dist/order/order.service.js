@@ -27,6 +27,8 @@ let OrderService = class OrderService {
             });
             if (!product)
                 throw new common_1.NotFoundException("Mahsulot topilmadi");
+            if (!product.userId)
+                throw new common_1.NotFoundException("Mahsulot yaratuvchisi topilmadi");
             if (product.finalPrice == null)
                 throw new common_1.InternalServerErrorException("Mahsulot narxi mavjud emas.");
             const summa = Number(product.finalPrice) * data.count;
@@ -39,6 +41,12 @@ let OrderService = class OrderService {
             });
             this.orderGateway.sendOrderNotification({
                 message: `Yangi buyurtma yaratildi! ID: ${order.id}`,
+                userId,
+                order,
+            });
+            this.orderGateway.sendOrderNotification({
+                message: `Sizning mahsulotingizga buyurtma berildi! Product ID: ${product.id}`,
+                userId: product.userId,
                 order,
             });
             return order;
@@ -72,7 +80,7 @@ let OrderService = class OrderService {
     async update(id, userId, data) {
         try {
             const existingOrder = await this.findOne(id, userId);
-            if (data.count !== undefined) {
+            if (data.count != undefined) {
                 const product = await this.prisma.product.findUnique({
                     where: { id: existingOrder.productId },
                 });
@@ -101,7 +109,7 @@ let OrderService = class OrderService {
             return await this.prisma.order.delete({ where: { id } });
         }
         catch (error) {
-            throw new common_1.InternalServerErrorException("Buyurtmani o‘chirishda xatolik yuz berdi.");
+            throw new common_1.InternalServerErrorException("Buyurtmani o'chirishda xatolik yuz berdi.");
         }
     }
 };

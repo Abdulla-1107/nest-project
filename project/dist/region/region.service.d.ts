@@ -8,7 +8,7 @@ export declare class RegionService {
         id: string;
         name: string;
     }>;
-    findAll(): Promise<({
+    findAllFiltered(name?: string): Promise<({
         users: {
             firstName: string;
             lastName: string;

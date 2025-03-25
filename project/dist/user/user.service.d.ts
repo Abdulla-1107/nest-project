@@ -19,15 +19,15 @@ export declare class UserService {
     register(registerDto: RegisterUserDto): Promise<{
         user: {
             email: string;
-            password: string;
-            regionId: string | null;
-            phone: string;
             firstName: string;
             lastName: string;
             image: string;
+            phone: string;
+            password: string;
+            regionId: string | null;
             role: import(".prisma/client").$Enums.Role;
-            status: import(".prisma/client").$Enums.Status;
             id: string;
+            status: import(".prisma/client").$Enums.Status;
         };
     }>;
     login(loginDto: LoginUserDto): Promise<{
@@ -36,15 +36,15 @@ export declare class UserService {
     findAll(): Promise<{
         data: {
             email: string;
-            password: string;
-            regionId: string | null;
-            phone: string;
             firstName: string;
             lastName: string;
             image: string;
+            phone: string;
+            password: string;
+            regionId: string | null;
             role: import(".prisma/client").$Enums.Role;
-            status: import(".prisma/client").$Enums.Status;
             id: string;
+            status: import(".prisma/client").$Enums.Status;
         }[];
     }>;
 }

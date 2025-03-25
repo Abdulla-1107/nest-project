@@ -69,7 +69,6 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterUserDto.prototype, "regionId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "USER", description: "Foydalanuvchi roli (USER yoki ADMIN)", required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(role_enum_1.Roles),
     __metadata("design:type", String)

@@ -19,6 +19,11 @@ let CategoryService = class CategoryService {
     }
     async create(data) {
         try {
+            const { name } = data;
+            let category = await this.prisma.category.findFirst({ where: { name } });
+            if (category) {
+                throw new common_1.ConflictException("Bunday category mavjud");
+            }
             return await this.prisma.category.create({ data });
         }
         catch (error) {
@@ -50,7 +55,7 @@ let CategoryService = class CategoryService {
             return await this.prisma.category.update({ where: { id }, data });
         }
         catch (error) {
-            throw new common_1.BadRequestException("Kategoriya yangilashda xatolik yuz berdi");
+            throw new common_1.BadRequestException("Categoriya topilmadi");
         }
     }
     async remove(id) {
@@ -59,7 +64,7 @@ let CategoryService = class CategoryService {
             return await this.prisma.category.delete({ where: { id } });
         }
         catch (error) {
-            throw new common_1.BadRequestException("Kategoriya o‘chirishda xatolik yuz berdi");
+            throw new common_1.BadRequestException("Categoriya topilmadi");
         }
     }
 };

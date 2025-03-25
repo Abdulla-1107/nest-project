@@ -20,13 +20,14 @@ export class OrderService {
       const product = await this.prisma.product.findUnique({
         where: { id: data.productId },
       });
-
+  
       if (!product) throw new NotFoundException("Mahsulot topilmadi");
+      if (!product.userId) throw new NotFoundException("Mahsulot yaratuvchisi topilmadi");
       if (product.finalPrice == null)
         throw new InternalServerErrorException("Mahsulot narxi mavjud emas.");
-
+  
       const summa = Number(product.finalPrice) * data.count;
-
+  
       const order = await this.prisma.order.create({
         data: {
           ...data,
@@ -34,19 +35,25 @@ export class OrderService {
           summa,
         },
       });
-
+  
       this.orderGateway.sendOrderNotification({
         message: `Yangi buyurtma yaratildi! ID: ${order.id}`,
+        userId,
         order,
       });
-
+  
+      this.orderGateway.sendOrderNotification({
+        message: `Sizning mahsulotingizga buyurtma berildi! Product ID: ${product.id}`,
+        userId: product.userId,
+        order,
+      });
+  
       return order;
     } catch (error) {
-      throw new InternalServerErrorException(
-        "Buyurtma yaratishda xatolik yuz berdi."
-      );
+      throw new InternalServerErrorException("Buyurtma yaratishda xatolik yuz berdi.");
     }
   }
+  
   async findAll(userId: string) {
     try {
       return await this.prisma.order.findMany({
@@ -77,7 +84,7 @@ export class OrderService {
     try {
       const existingOrder = await this.findOne(id, userId);
 
-      if (data.count !== undefined) {
+      if (data.count != undefined) {
         const product = await this.prisma.product.findUnique({
           where: { id: existingOrder.productId },
         });
@@ -111,7 +118,7 @@ export class OrderService {
       return await this.prisma.order.delete({ where: { id } });
     } catch (error) {
       throw new InternalServerErrorException(
-        "Buyurtmani o‘chirishda xatolik yuz berdi."
+        "Buyurtmani o'chirishda xatolik yuz berdi."
       );
     }
   }

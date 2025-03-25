@@ -29,9 +29,9 @@ import { RoleGuard } from "src/guards/role.guard";
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Role(Roles.ADMIN)
-  @UseGuards(RoleGuard)
-  @UseGuards(AuthGuard)
+  // @Role(Roles.ADMIN)
+  // @UseGuards(RoleGuard)
+  // @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: "Yangi kategoriya qo‘shish" })
   async create(@Body() data: CreateCategoryDto) {
@@ -55,9 +55,9 @@ export class CategoryController {
     return await this.categoryService.findOne(id);
   }
 
-  @Role(Roles.ADMIN)
-  @UseGuards(RoleGuard)
-  @UseGuards(AuthGuard)
+  // @Role(Roles.ADMIN)
+  // @UseGuards(RoleGuard)
+  // @UseGuards(AuthGuard)
   @Patch(":id")
   @ApiOperation({ summary: "Kategoriyani yangilash" })
   @ApiParam({
@@ -70,9 +70,9 @@ export class CategoryController {
     return await this.categoryService.update(id, data);
   }
 
-  @Role(Roles.ADMIN)
-  @UseGuards(RoleGuard)
-  @UseGuards(AuthGuard)
+  // @Role(Roles.ADMIN)
+  // @UseGuards(RoleGuard)
+  // @UseGuards(AuthGuard)
   @Delete(":id")
   @ApiOperation({ summary: "Kategoriyani o‘chirish" })
   @ApiParam({

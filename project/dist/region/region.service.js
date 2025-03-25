@@ -31,9 +31,17 @@ let RegionService = class RegionService {
             throw new common_1.BadRequestException(error.message);
         }
     }
-    async findAll() {
+    async findAllFiltered(name) {
         try {
             return await this.prisma.region.findMany({
+                where: name
+                    ? {
+                        name: {
+                            contains: name,
+                            mode: "insensitive",
+                        },
+                    }
+                    : {},
                 include: {
                     users: {
                         select: {
