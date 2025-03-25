@@ -8,61 +8,60 @@ export declare class OrderService {
     constructor(prisma: PrismaService, orderGateway: OrderGateway);
     create(userId: string, data: CreateOrderDto): Promise<{
         id: string;
-        productId: string;
         userId: string;
         count: number;
-        summa: import("@prisma/client/runtime/library").Decimal;
         createdAt: Date;
+        productId: string;
+        summa: import("@prisma/client/runtime/library").Decimal;
     }>;
     findAll(userId: string): Promise<({
         product: {
+            status: string;
             id: string;
-            userId: string;
-            count: number;
-            createdAt: Date;
             name: string;
+            userId: string;
+            description: string;
             price: import("@prisma/client/runtime/library").Decimal;
             discountPercentage: number;
             discountAmount: import("@prisma/client/runtime/library").Decimal | null;
             finalPrice: import("@prisma/client/runtime/library").Decimal | null;
-            description: string;
+            count: number;
             condition: string;
             bargain: boolean;
-            status: string;
             type: import(".prisma/client").$Enums.ProductType;
-            location: import("@prisma/client/runtime/library").JsonValue;
+            createdAt: Date;
             categoryId: string;
         };
     } & {
         id: string;
-        productId: string;
         userId: string;
         count: number;
-        summa: import("@prisma/client/runtime/library").Decimal;
         createdAt: Date;
+        productId: string;
+        summa: import("@prisma/client/runtime/library").Decimal;
     })[]>;
     findOne(id: string, userId: string): Promise<{
         id: string;
-        productId: string;
         userId: string;
         count: number;
-        summa: import("@prisma/client/runtime/library").Decimal;
         createdAt: Date;
+        productId: string;
+        summa: import("@prisma/client/runtime/library").Decimal;
     }>;
     update(id: string, userId: string, data: UpdateOrderDto): Promise<{
         id: string;
-        productId: string;
         userId: string;
         count: number;
-        summa: import("@prisma/client/runtime/library").Decimal;
         createdAt: Date;
+        productId: string;
+        summa: import("@prisma/client/runtime/library").Decimal;
     }>;
     remove(id: string, userId: string): Promise<{
         id: string;
-        productId: string;
         userId: string;
         count: number;
-        summa: import("@prisma/client/runtime/library").Decimal;
         createdAt: Date;
+        productId: string;
+        summa: import("@prisma/client/runtime/library").Decimal;
     }>;
 }

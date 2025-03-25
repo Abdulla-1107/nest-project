@@ -5,28 +5,28 @@ export declare class CategoryController {
     private readonly categoryService;
     constructor(categoryService: CategoryService);
     create(data: CreateCategoryDto): Promise<{
-        type: string;
         id: string;
         name: string;
+        type: string;
     }>;
     findAll(): Promise<{
-        type: string;
         id: string;
         name: string;
+        type: string;
     }[]>;
     findOne(id: string): Promise<{
-        type: string;
         id: string;
         name: string;
+        type: string;
     }>;
     update(id: string, data: UpdateCategoryDto): Promise<{
-        type: string;
         id: string;
         name: string;
+        type: string;
     }>;
     remove(id: string): Promise<{
-        type: string;
         id: string;
         name: string;
+        type: string;
     }>;
 }

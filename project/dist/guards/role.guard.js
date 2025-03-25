@@ -12,28 +12,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoleGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
-const role_decorators_1 = require("../decorators/role.decorators");
+const jwt_1 = require("@nestjs/jwt");
 let RoleGuard = class RoleGuard {
     reflector;
-    constructor(reflector) {
+    jwtService;
+    constructor(reflector, jwtService) {
         this.reflector = reflector;
+        this.jwtService = jwtService;
     }
     canActivate(context) {
-        const roles = this.reflector.getAllAndOverride(role_decorators_1.ROLES_KEY, [
-            context.getHandler(),
-            context.getClass(),
-        ]);
-        if (!roles || roles.length == 0) {
-            return true;
-        }
         const request = context.switchToHttp().getRequest();
-        const user = request.user;
-        if (!user) {
-            throw new common_1.UnauthorizedException('Foydalanuvchi autentifikatsiya qilinmagan');
+        const authHeader = request.headers.authorization;
+        if (!authHeader) {
+            throw new common_1.ForbiddenException('Token mavjud emas!');
         }
-        const hasRole = roles.some((role) => role == user.role);
-        if (!hasRole) {
-            throw new common_1.ForbiddenException(`Sizga ushbu harakatni bajarishga ruxsat yo‘q`);
+        const token = authHeader.split(' ')[1];
+        const decoded = this.jwtService.decode(token);
+        if (!decoded || decoded.role !== 'ADMIN') {
+            throw new common_1.ForbiddenException('Bu amal faqat adminlar uchun ruxsat etilgan!');
         }
         return true;
     }
@@ -41,6 +37,6 @@ let RoleGuard = class RoleGuard {
 exports.RoleGuard = RoleGuard;
 exports.RoleGuard = RoleGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [core_1.Reflector])
+    __metadata("design:paramtypes", [core_1.Reflector, jwt_1.JwtService])
 ], RoleGuard);
 //# sourceMappingURL=role.guard.js.map

@@ -26,7 +26,8 @@ let ProductController = class ProductController {
     }
     async create(req, data) {
         const userId = req["user"].id;
-        return await this.productService.create({ ...data, userId });
+        console.log(userId);
+        return await this.productService.create(userId, data);
     }
     async findAll(page, limit, search, categoryId) {
         const pageNumber = Math.max(parseInt(page) || 1, 1);
@@ -47,10 +48,10 @@ let ProductController = class ProductController {
 };
 exports.ProductController = ProductController;
 __decorate([
-    (0, common_1.Post)(),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: "Yangi mahsulot qo‘shish" }),
-    __param(0, (0, common_1.Req)()),
+    __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, create_product_dto_1.CreateProductDto]),

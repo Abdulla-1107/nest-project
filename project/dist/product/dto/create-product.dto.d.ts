@@ -11,7 +11,6 @@ export declare class CreateProductDto {
     bargain?: boolean;
     status: string;
     type: ProductType;
-    location: any;
     categoryId: string;
     userId: string;
 }

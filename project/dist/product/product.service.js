@@ -17,12 +17,22 @@ let ProductService = class ProductService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(data) {
-        const { price, discountPercentage = 0, discountAmount = 0 } = data;
-        const finalPrice = price - price * (discountPercentage / 100) - discountAmount;
-        return this.prisma.product.create({
-            data: { ...data, finalPrice },
-        });
+    async create(userId, data) {
+        const { categoryId } = data;
+        if (categoryId) {
+            const category = await this.prisma.category.findFirst({
+                where: { id: categoryId },
+            });
+            if (!category) {
+                throw new common_1.NotFoundException("Kategoriya topilmadi");
+            }
+            const { price, discountPercentage = 0, discountAmount = 0 } = data;
+            const finalPrice = price - price * (discountPercentage / 100) - discountAmount;
+            console.log(userId);
+            return this.prisma.product.create({
+                data: { ...data, userId, finalPrice },
+            });
+        }
     }
     async findAll(page, limit, search, categoryId) {
         return this.prisma.product.findMany({
@@ -45,11 +55,14 @@ let ProductService = class ProductService {
         if (product.userId != userId) {
             throw new common_1.ForbiddenException("Siz faqat o'zingiz yaratgan mahsulotni yangilashingiz mumkin");
         }
-        if (data.price != undefined || data.discountPercentage != undefined || data.discountAmount != undefined) {
+        if (data.price != undefined ||
+            data.discountPercentage != undefined ||
+            data.discountAmount != undefined) {
             const price = Number(data.price ?? product.price);
             const discountPercentage = Number(data.discountPercentage ?? 0);
             const discountAmount = Number(data.discountAmount ?? 0);
-            data.finalPrice = price - price * (discountPercentage / 100) - discountAmount;
+            data.finalPrice =
+                price - price * (discountPercentage / 100) - discountAmount;
         }
         return this.prisma.product.update({
             where: { id },

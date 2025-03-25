@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
@@ -7,16 +11,33 @@ import { UpdateProductDto } from "./dto/update-product.dto";
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateProductDto) {
-    const { price, discountPercentage = 0, discountAmount = 0 } = data;
-    const finalPrice = price - price * (discountPercentage / 100) - discountAmount;
+  async create(userId: string, data: CreateProductDto) {
+    const { categoryId } = data;
 
-    return this.prisma.product.create({
-      data: { ...data, finalPrice },
-    });
+    if (categoryId) {
+      const category = await this.prisma.category.findFirst({
+        where: { id: categoryId },
+      });
+
+      if (!category) {
+        throw new NotFoundException("Kategoriya topilmadi");
+      }
+      const { price, discountPercentage = 0, discountAmount = 0 } = data;
+      const finalPrice =
+        price - price * (discountPercentage / 100) - discountAmount;
+
+      console.log(userId);
+      return this.prisma.product.create({
+        data: { ...data, userId, finalPrice },
+      });
+    }
   }
-
-  async findAll(page: number, limit: number, search: string, categoryId: string) {
+  async findAll(
+    page: number,
+    limit: number,
+    search: string,
+    categoryId: string
+  ) {
     return this.prisma.product.findMany({
       where: {
         name: { contains: search, mode: "insensitive" },
@@ -35,17 +56,24 @@ export class ProductService {
 
   async update(id: string, userId: string, data: UpdateProductDto) {
     const product = await this.findOne(id);
-    
+
     if (product.userId != userId) {
-      throw new ForbiddenException("Siz faqat o'zingiz yaratgan mahsulotni yangilashingiz mumkin");
+      throw new ForbiddenException(
+        "Siz faqat o'zingiz yaratgan mahsulotni yangilashingiz mumkin"
+      );
     }
 
-    if (data.price != undefined || data.discountPercentage != undefined || data.discountAmount != undefined) {
+    if (
+      data.price != undefined ||
+      data.discountPercentage != undefined ||
+      data.discountAmount != undefined
+    ) {
       const price = Number(data.price ?? product.price);
       const discountPercentage = Number(data.discountPercentage ?? 0);
       const discountAmount = Number(data.discountAmount ?? 0);
 
-      data.finalPrice = price - price * (discountPercentage / 100) - discountAmount;
+      data.finalPrice =
+        price - price * (discountPercentage / 100) - discountAmount;
     }
 
     return this.prisma.product.update({
@@ -56,9 +84,11 @@ export class ProductService {
 
   async remove(id: string, userId: string) {
     const product = await this.findOne(id);
-    
+
     if (product.userId != userId) {
-      throw new ForbiddenException("Siz faqat o'zingiz yaratgan mahsulotni o'chirishingiz mumkin");
+      throw new ForbiddenException(
+        "Siz faqat o'zingiz yaratgan mahsulotni o'chirishingiz mumkin"
+      );
     }
 
     return this.prisma.product.delete({ where: { id } });

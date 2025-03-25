@@ -41,6 +41,9 @@ export class RegionController {
 
   @ApiOperation({ summary: "Barcha regionlarni olish" })
   @ApiResponse({ status: 200, description: "Regionlar ro'yxati" })
+  @Role(Roles.USER)
+  @UseGuards(RoleGuard)
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.regionService.findAll();

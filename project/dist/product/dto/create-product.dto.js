@@ -25,7 +25,6 @@ class CreateProductDto {
     bargain;
     status;
     type;
-    location;
     categoryId;
     userId;
 }
@@ -95,17 +94,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "type", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '{"latitude": 41.2995, "longitude": 69.2401}', description: "Lokatsiya" }),
-    (0, class_validator_1.IsJSON)(),
-    __metadata("design:type", Object)
-], CreateProductDto.prototype, "location", void 0);
-__decorate([
     (0, swagger_1.ApiProperty)({ example: "123e4567-e89b-12d3-a456-426614174000", description: "Kategoriya ID" }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "categoryId", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "userId", void 0);
 //# sourceMappingURL=create-product.dto.js.map

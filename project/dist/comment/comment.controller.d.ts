@@ -16,12 +16,12 @@ export declare class CommentController {
     findAll(productId: string): Promise<({
         user: {
             email: string;
+            password: string;
+            regionId: string | null;
+            phone: string;
             firstName: string;
             lastName: string;
             image: string;
-            phone: string;
-            password: string;
-            regionId: string | null;
             role: import(".prisma/client").$Enums.Role;
             status: import(".prisma/client").$Enums.Status;
             id: string;

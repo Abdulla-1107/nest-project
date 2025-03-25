@@ -33,7 +33,23 @@ let AppModule = class AppModule {
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, config_1.ConfigModule.forRoot(), region_module_1.RegionModule, session_module_1.SessionModule, prisma_module_1.PrismaModule, product_module_1.ProductModule, category_module_1.CategoryModule, like_module_1.LikeModule, comment_module_1.CommentModule, order_module_1.OrderModule, product_view_module_1.ProductViewModule, chat_module_1.ChatModule, color_item_module_1.ColorItemModule, color_module_1.ColorModule, information_module_1.InformationModule],
+        imports: [
+            user_module_1.UserModule,
+            config_1.ConfigModule.forRoot(),
+            region_module_1.RegionModule,
+            session_module_1.SessionModule,
+            prisma_module_1.PrismaModule,
+            product_module_1.ProductModule,
+            category_module_1.CategoryModule,
+            like_module_1.LikeModule,
+            comment_module_1.CommentModule,
+            order_module_1.OrderModule,
+            product_view_module_1.ProductViewModule,
+            chat_module_1.ChatModule,
+            color_item_module_1.ColorItemModule,
+            color_module_1.ColorModule,
+            information_module_1.InformationModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, prisma_service_1.PrismaService, chat_gateway_1.ChatGateway, chat_service_1.ChatService],
     })

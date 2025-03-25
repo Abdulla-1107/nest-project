@@ -65,14 +65,9 @@ export class CreateProductDto {
   @IsEnum(ProductType)
   type: ProductType;
 
-  @ApiProperty({ example: '{"latitude": 41.2995, "longitude": 69.2401}', description: "Lokatsiya" })
-  @IsJSON()
-  location: any;
-
   @ApiProperty({ example: "123e4567-e89b-12d3-a456-426614174000", description: "Kategoriya ID" })
   @IsString()
   categoryId: string;
 
-  @IsString()
   userId: string;
 }

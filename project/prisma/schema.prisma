@@ -71,7 +71,6 @@ model Product {
   bargain            Boolean     @default(false)
   status             String
   type               ProductType
-  location           Json
   createdAt          DateTime    @default(now())
 
   userId String

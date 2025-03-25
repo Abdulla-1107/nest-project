@@ -16,13 +16,11 @@ export declare class LikeService {
     }>;
     getUserLikes(userId: string): Promise<({
         product: {
-            type: import(".prisma/client").$Enums.ProductType;
-            description: string;
             status: string;
             id: string;
             name: string;
             userId: string;
-            location: import("@prisma/client/runtime/library").JsonValue;
+            description: string;
             price: import("@prisma/client/runtime/library").Decimal;
             discountPercentage: number;
             discountAmount: import("@prisma/client/runtime/library").Decimal | null;
@@ -30,8 +28,9 @@ export declare class LikeService {
             count: number;
             condition: string;
             bargain: boolean;
-            categoryId: string;
+            type: import(".prisma/client").$Enums.ProductType;
             createdAt: Date;
+            categoryId: string;
         };
     } & {
         id: string;

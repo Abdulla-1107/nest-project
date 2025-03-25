@@ -9,9 +9,9 @@ import {
   Query,
   Req,
   UseGuards,
+  Request,
 } from "@nestjs/common";
 import { ProductService } from "./product.service";
-import { Request } from "express";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import {
@@ -30,12 +30,13 @@ import { AuthGuard } from "src/guards/auth.guard";
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post()
   @UseGuards(AuthGuard)
+  @Post()
   @ApiOperation({ summary: "Yangi mahsulot qo‘shish" })
-  async create(@Req() req: Request, @Body() data: CreateProductDto) {
+  async create(@Request() req: Request, @Body() data: CreateProductDto) {
     const userId = req["user"].id;
-    return await this.productService.create({ ...data, userId });
+    console.log(userId);
+    return await this.productService.create(userId, data);
   }
 
   @Get()

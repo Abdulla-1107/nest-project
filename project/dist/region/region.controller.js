@@ -60,6 +60,9 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Barcha regionlarni olish" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Regionlar ro'yxati" }),
+    (0, role_decorators_1.Role)(role_enum_1.Roles.USER),
+    (0, common_1.UseGuards)(role_guard_1.RoleGuard),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
